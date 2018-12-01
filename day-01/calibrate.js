@@ -1,20 +1,45 @@
 /*
- * Find a final frequency value after incremental changes
+ * functions to help with calibration
  *
- * Problem statement: adventofcode.com/2018/day/1
  */
 
 const fs = require('fs')
 
-// reads integer input values from the input file
-const getFrequencyChanges = cb => {
-  fs.readFile('input.txt', 'utf8', (err, data) => {
-    cb(data.split('\n').map(Number))
+const getInputValues = cb => {
+  fs.readFile('input.txt', 'utf8', (_, lines) => {
+    cb(lines.split('\n').filter(Boolean).map(Number))
   })
 }
 
-// read and sum up frequency changes to get the final value
-getFrequencyChanges(values => {
-  const total = values.reduce((acc, v) => acc + v)
-  console.log(total)
-})
+// returns the sum of given numerical values
+const sumValues = values => values.reduce((memo, v) => memo + v, 0)
+
+// returns the first frequency encountered twice
+const findRepeatedFrequency = changes => {
+  const frequencies = cumulativeSum(changes)
+  const seen = new Set()
+
+  for (let f of frequencies) {
+    if (seen.has(f)) return f
+    seen.add(f)
+  }
+}
+
+// iterates forever through the running total of the given values
+function * cumulativeSum (values) {
+  let current = 0
+
+  while (true) {
+    for (let val of values) {
+      yield current
+      current += val
+    }
+  }
+}
+
+// export for testing
+module.exports = {
+  findRepeatedFrequency,
+  getInputValues,
+  sumValues
+}
