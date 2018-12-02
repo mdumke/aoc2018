@@ -13,7 +13,7 @@ const checksum = ids => {
 
 // updates the state if letters appear exactly two or three times
 const countMultiples = (state, id) => {
-  const multiples = uniqueValues(countChars(id))
+  const multiples = new Set(Object.values(countChars(id)))
 
   return {
     doubles: (state.doubles || 0) + multiples.has(2),
@@ -22,15 +22,11 @@ const countMultiples = (state, id) => {
 }
 
 // counts the number of occurences of each character
-const countChars = str => {
-  const counts = {}
-
-  for (let char of str) {
-    counts[char] = (counts[char] || 0) + 1
-  }
-
-  return counts
-}
+// ASSUMES: ids are BMP unicode
+const countChars = str => str.split('').reduce((memo, c) => {
+  memo[c] = (memo[c] || 0) + 1
+  return memo
+}, {})
 
 // returns an array of pairs that differ in exactly one char
 // ASSUMES: ids have equal length and only BMP unicode
@@ -71,9 +67,6 @@ const commonChars = (s1, s2) => {
 
   return result
 }
-
-// returns only the values of the given object as a set
-const uniqueValues = obj => new Set(Object.keys(obj).map(k => obj[k]))
 
 // reads inputs from the file
 const getBoxIds = cb => {

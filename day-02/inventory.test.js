@@ -29,12 +29,6 @@ test('countChars', g => {
     t.end()
   })
 
-  g.test('handles non-astral unicode', t => {
-    const str = '\u{1f4a9}\u{1f642}\u{1f4a9}'
-    t.same(countChars(str), { '\u{1f4a9}': 2, '\u{1f642}': 1 })
-    t.end()
-  })
-
   g.end()
 })
 
