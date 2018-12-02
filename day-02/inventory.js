@@ -13,19 +13,11 @@ const checksum = ids => {
 
 // updates the state if letters appear exactly two or three times
 const countMultiples = (state, id) => {
-  const charCounts = countChars(id)
-
-  let hasDoubles = false
-  let hasTriplets = false
-
-  for (let char in charCounts) {
-    if (charCounts[char] === 2) hasDoubles = true
-    if (charCounts[char] === 3) hasTriplets = true
-  }
+  const multiples = uniqueValues(countChars(id))
 
   return {
-    doubles: (state.doubles || 0) + hasDoubles,
-    triplets: (state.triplets || 0) + hasTriplets
+    doubles: (state.doubles || 0) + multiples.has(2),
+    triplets: (state.triplets || 0) + multiples.has(3)
   }
 }
 
@@ -39,6 +31,9 @@ const countChars = str => {
 
   return counts
 }
+
+// returns only the values of the given object as a set
+const uniqueValues = obj => new Set(Object.keys(obj).map(k => obj[k]))
 
 // reads inputs from the file
 const getBoxIds = cb => {
