@@ -1,5 +1,12 @@
 const { test } = require('tap')
-const { checksum, countMultiples, countChars } = require('./inventory')
+const {
+  checksum,
+  countMultiples,
+  countChars,
+  commonChars,
+  computeDistance,
+  findClosePairs
+} = require('./inventory')
 
 test('countChars', g => {
   g.test('handles empty string', t => {
@@ -144,6 +151,110 @@ test('checksum', g => {
     ]
 
     t.equal(checksum(ids), 12)
+    t.end()
+  })
+
+  g.end()
+})
+
+test('computeDistance', g => {
+  g.test('handles empty stings', t => {
+    t.equal(computeDistance('', ''), 0)
+    t.end()
+  })
+
+  g.test('case a a', t => {
+    t.equal(computeDistance('a', 'a'), 0)
+    t.end()
+  })
+
+  g.test('case a b', t => {
+    t.equal(computeDistance('a', 'b'), 1)
+    t.end()
+  })
+
+  g.test('case aa ab', t => {
+    t.equal(computeDistance('aa', 'ab'), 1)
+    t.end()
+  })
+
+  g.test('case aa bb', t => {
+    t.equal(computeDistance('aa', 'bb'), 2)
+    t.end()
+  })
+
+  g.test('given example 1', t => {
+    t.equal(computeDistance('abcde', 'axcye'), 2)
+    t.end()
+  })
+
+  g.test('given example 2', t => {
+    t.equal(computeDistance('fghij', 'fguij'), 1)
+    t.end()
+  })
+
+  g.end()
+})
+
+test('findClosePairs', g => {
+  g.test('finds no pairs if none exist', t => {
+    const ids = ['aa', 'bb', 'cc']
+    t.same(findClosePairs(ids), [])
+    t.end()
+  })
+
+  g.test('finds a single existing pair', t => {
+    const ids = ['a', 'b']
+    t.same(findClosePairs(ids), [['a', 'b']])
+    t.end()
+  })
+
+  g.test('given example', t => {
+    const ids = [
+      'abcde',
+      'fghij',
+      'klmno',
+      'pqrst',
+      'fguij',
+      'axcye',
+      'wvxyz'
+    ]
+    t.same(findClosePairs(ids), [['fghij', 'fguij']])
+    t.end()
+  })
+
+  g.test('finds multiple close pairs', t => {
+    const ids = ['aa', 'ab', 'ac', 'bb']
+    t.same(findClosePairs(ids), [
+      ['aa', 'ab'],
+      ['aa', 'ac'],
+      ['ab', 'ac'],
+      ['ab', 'bb']
+    ])
+    t.end()
+  })
+
+  g.end()
+})
+
+test('commonChars', g => {
+  g.test('handles empty strings', t => {
+    t.equal(commonChars('', ''), '')
+    t.end()
+  })
+
+  g.test('handles equal strings', t => {
+    t.equal(commonChars('abc', 'abc'), 'abc')
+    t.end()
+  })
+
+  g.test('handles differing strings', t => {
+    t.equal(commonChars('xxx', 'yyy'), '')
+    t.end()
+  })
+
+  g.test('given example', t => {
+    t.equal(commonChars('fghij', 'fguij'), 'fgij')
     t.end()
   })
 
