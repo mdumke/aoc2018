@@ -5,6 +5,25 @@
 
 const fs = require('fs')
 
+// return ids of claims that don't conflict with any other
+const findIntactClaims = claims => {
+  let intact = []
+  let isIntact
+
+  claims.forEach((claim1, i) => {
+    isIntact = true
+
+    claims.forEach((claim2, k) => {
+      if (i === k) return
+      if (computeOverlap(claim1, claim2).length) isIntact = false
+    })
+
+    if (isIntact) intact.push(claim1.id)
+  })
+
+  return intact
+}
+
 // returns the number of square inches covered by multiple claims
 const countOverlappingSquares = claims => {
   const squares = findOverlappingSquares(claims)
@@ -79,6 +98,7 @@ module.exports = {
   computeOverlap,
   countOverlappingSquares,
   getClaims,
+  findIntactClaims,
   findOverlappingSquares,
   parseClaim
 }

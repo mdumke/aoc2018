@@ -2,6 +2,7 @@ const { test } = require('tap')
 const {
   computeOverlap,
   countOverlappingSquares,
+  findIntactClaims,
   findOverlappingSquares,
   parseClaim
 } = require('./slicing')
@@ -245,6 +246,64 @@ test('countOverlappingSquares', g => {
     ]
 
     t.equal(countOverlappingSquares(claims), 4)
+    t.end()
+  })
+
+  g.end()
+})
+
+test('findIntactClaims', g => {
+  g.test('handles missing intact claims', t => {
+    const claims = [
+      { id: 1, left: 0, top: 0, width: 2, height: 2 },
+      { id: 3, left: 1, top: 0, width: 2, height: 2 }
+    ]
+
+    t.same(findIntactClaims(claims), [])
+    t.end()
+  })
+
+  g.test('two adjacent claims', t => {
+    const claims = [
+      { id: 2, left: 0, top: 0, width: 2, height: 2 },
+      { id: 3, left: 2, top: 0, width: 2, height: 2 }
+    ]
+
+    t.same(findIntactClaims(claims), [2, 3])
+    t.end()
+  })
+
+  g.test('three claims, one intact', t => {
+    const claims = [
+      { id: 7, left: 0, top: 0, width: 2, height: 2 },
+      { id: 8, left: 1, top: 0, width: 2, height: 2 },
+      { id: 9, left: 3, top: 0, width: 2, height: 2 }
+    ]
+
+    t.same(findIntactClaims(claims), [9])
+    t.end()
+  })
+
+  g.test('complex example', t => {
+    const claims = [
+      { id: 5, left: 0, top: 3, width: 4, height: 1 },
+      { id: 7, left: 1, top: 2, width: 1, height: 3 },
+      { id: 2, left: 3, top: 3, width: 1, height: 4 },
+      { id: 6, left: 0, top: 5, width: 3, height: 2 }
+    ]
+
+    t.same(findIntactClaims(claims), [6])
+    t.end()
+  })
+
+  g.test('given example', t => {
+    const claims = [
+      { id: 1, left: 1, top: 3, width: 4, height: 4 },
+      { id: 2, left: 3, top: 1, width: 4, height: 4 },
+      { id: 3, left: 5, top: 5, width: 2, height: 2 }
+    ]
+
+    t.same(findIntactClaims(claims), [3])
     t.end()
   })
 
