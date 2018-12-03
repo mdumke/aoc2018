@@ -1,5 +1,5 @@
 /*
- * Fabric slicing functions and utilities
+ * Functions to compute overlapping claims, plus utilities
  *
  */
 
