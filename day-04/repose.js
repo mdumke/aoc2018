@@ -5,14 +5,29 @@
 
 const fs = require('fs')
 
-// returns guard and minute to select for action
+// returns guard and minute to select for action (acc. strategy 2)
+const findMostSleptMinuteByGuard = records => {
+  const lookup = buildSleepMap(records)
+
+  const sleepiestMinutesByGuard = Object
+    .keys(lookup)
+    .map(guard => ({ guard, ...findSleepiestMinute(lookup[guard]) }))
+    .sort((a, b) => b.count - a.count)
+
+  return {
+    guard: sleepiestMinutesByGuard[0].guard,
+    minute: sleepiestMinutesByGuard[0].value
+  }
+}
+
+// returns guard and minute to select for action (acc. strategy 1)
 const findSleepiestGuardAndMinute = records => {
   const sleepLookup = buildSleepMap(records)
 
-  const { guard } = findMostAsleepGuard(sleepLookup)
+  const { guard } = findSleepiestGuard(sleepLookup)
   const minute = findSleepiestMinute(sleepLookup[guard]).value
 
-  return { guard: Number(guard), minute }
+  return { guard, minute }
 }
 
 // returns minute most often covered by intervals, with sleep-count
@@ -31,7 +46,7 @@ const findSleepiestMinute = intervals => {
 
 // returns the id of the most often asleep guard
 // ASSUMES: lookup has at least one entry
-const findMostAsleepGuard = lookup => {
+const findSleepiestGuard = lookup => {
   return Object.keys(lookup).reduce((max, guard) => {
     if (!max.guard || sumSleepTime(lookup[guard]) > max.total) {
       max.guard = guard
@@ -94,7 +109,8 @@ const parseEvent = event => {
 
 module.exports = {
   buildSleepMap,
-  findMostAsleepGuard,
+  findSleepiestGuard,
+  findMostSleptMinuteByGuard,
   findSleepiestMinute,
   findSleepiestGuardAndMinute,
   getRecords

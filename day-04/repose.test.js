@@ -1,7 +1,8 @@
 const { test } = require('tap')
 const {
   buildSleepMap,
-  findMostAsleepGuard,
+  findSleepiestGuard,
+  findMostSleptMinuteByGuard,
   findSleepiestMinute
 } = require('./repose')
 
@@ -97,11 +98,11 @@ test('buildSleepMap', g => {
   g.end()
 })
 
-test('findMostAsleepGuard', g => {
+test('findSleepiestGuard', g => {
   g.test('single empty entry', t => {
     const lookup = { 1: [] }
 
-    t.same(findMostAsleepGuard(lookup), {
+    t.same(findSleepiestGuard(lookup), {
       guard: 1,
       total: 0
     })
@@ -111,7 +112,7 @@ test('findMostAsleepGuard', g => {
   g.test('single entry', t => {
     const lookup = { 1: [[1, 2]] }
 
-    t.same(findMostAsleepGuard(lookup), {
+    t.same(findSleepiestGuard(lookup), {
       guard: 1,
       total: 1
     })
@@ -124,7 +125,7 @@ test('findMostAsleepGuard', g => {
       2: [[10, 20]]
     }
 
-    t.same(findMostAsleepGuard(lookup), {
+    t.same(findSleepiestGuard(lookup), {
       guard: 2,
       total: 10
     })
@@ -140,7 +141,7 @@ test('findMostAsleepGuard', g => {
       1: [[5, 10]]
     }
 
-    t.same(findMostAsleepGuard(lookup), {
+    t.same(findSleepiestGuard(lookup), {
       guard: 7,
       total: 32
     })
@@ -153,7 +154,7 @@ test('findMostAsleepGuard', g => {
       99: [[40, 50], [36, 46], [45, 55]]
     }
 
-    t.same(findMostAsleepGuard(lookup), {
+    t.same(findSleepiestGuard(lookup), {
       guard: 10,
       total: 50
     })
@@ -203,6 +204,42 @@ test('findSleepiestMinute', g => {
     t.equal(findSleepiestMinute([
       [5, 25], [30, 55], [24, 29]
     ]).value, 24)
+    t.end()
+  })
+
+  g.end()
+})
+
+test('findMostSleptMinuteByGuard', g => {
+  g.test('given example', t => {
+    const records = [
+      [new Date(1518, 11, 1, 0, 0), { guard: 10 }],
+      [new Date(1518, 11, 1, 0, 5), { sleep: true }],
+      [new Date(1518, 11, 1, 0, 25), { wake: true }],
+      [new Date(1518, 11, 1, 0, 30), { sleep: true }],
+      [new Date(1518, 11, 1, 0, 55), { wake: true }],
+
+      [new Date(1518, 11, 1, 23, 58), { guard: 99 }],
+      [new Date(1518, 11, 2, 0, 40), { sleep: true }],
+      [new Date(1518, 11, 2, 0, 50), { wake: true }],
+
+      [new Date(1518, 11, 3, 0, 5), { guard: 10 }],
+      [new Date(1518, 11, 3, 0, 24), { sleep: true }],
+      [new Date(1518, 11, 3, 0, 29), { wake: true }],
+
+      [new Date(1518, 11, 4, 0, 2), { guard: 99 }],
+      [new Date(1518, 11, 4, 0, 36), { sleep: true }],
+      [new Date(1518, 11, 4, 0, 46), { wake: true }],
+
+      [new Date(1518, 11, 5, 0, 3), { guard: 99 }],
+      [new Date(1518, 11, 5, 0, 45), { sleep: true }],
+      [new Date(1518, 11, 5, 0, 55), { wake: true }]
+    ]
+
+    t.same(findMostSleptMinuteByGuard(records), {
+      guard: 99,
+      minute: 45
+    })
     t.end()
   })
 
