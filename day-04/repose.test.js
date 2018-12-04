@@ -2,7 +2,7 @@ const { test } = require('tap')
 const {
   buildSleepMap,
   findMostAsleepGuard,
-  findMostAsleepMinute
+  findSleepiestMinute
 } = require('./repose')
 
 test('buildSleepMap', g => {
@@ -163,43 +163,46 @@ test('findMostAsleepGuard', g => {
   g.end()
 })
 
-test('findMostAsleepMinute', g => {
+test('findSleepiestMinute', g => {
   test('one-minute interval', t => {
-    t.equal(findMostAsleepMinute([[0, 1]]), 0)
+    t.equal(findSleepiestMinute([[0, 1]]).value, 0)
     t.end()
   })
 
   test('one longer interval', t => {
-    t.equal(findMostAsleepMinute([[10, 20]]), 10)
+    t.equal(findSleepiestMinute([[10, 20]]).value, 10)
     t.end()
   })
 
   test('two intervals without overlap', t => {
-    t.equal(findMostAsleepMinute([[15, 20], [40, 50]]), 15)
+    t.equal(findSleepiestMinute([[15, 20], [40, 50]]).value, 15)
     t.end()
   })
 
   test('two adjacent intervals', t => {
-    t.equal(findMostAsleepMinute([[1, 2], [2, 3]]), 1)
+    t.equal(findSleepiestMinute([[1, 2], [2, 3]]).value, 1)
     t.end()
   })
 
   test('two overlapping intervals', t => {
-    t.equal(findMostAsleepMinute([[10, 21], [20, 30]]), 20)
+    t.equal(findSleepiestMinute([[10, 21], [20, 30]]).value, 20)
     t.end()
   })
 
   test('multiple overlapping intervals', t => {
-    t.equal(findMostAsleepMinute([
+    const intervals = [
       [5, 20], [10, 30], [20, 35], [29, 45], [40, 50], [44, 55]
-    ]), 29)
+    ]
+
+    t.equal(findSleepiestMinute(intervals).value, 29)
+    t.equal(findSleepiestMinute(intervals).count, 3)
     t.end()
   })
 
   test('given example', t => {
-    t.equal(findMostAsleepMinute([
+    t.equal(findSleepiestMinute([
       [5, 25], [30, 55], [24, 29]
-    ]), 24)
+    ]).value, 24)
     t.end()
   })
 

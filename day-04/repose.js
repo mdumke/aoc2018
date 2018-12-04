@@ -1,24 +1,32 @@
+/*
+ * Functions to find sleepiest guards and minutes
+ *
+ */
+
 const fs = require('fs')
 
 // returns guard and minute to select for action
-const findTargetGuardAndMinute = records => {
+const findSleepiestGuardAndMinute = records => {
   const sleepLookup = buildSleepMap(records)
 
   const { guard } = findMostAsleepGuard(sleepLookup)
-  const minute = findMostAsleepMinute(sleepLookup[guard])
+  const minute = findSleepiestMinute(sleepLookup[guard]).value
 
   return { guard: Number(guard), minute }
 }
 
-// returns the (first) minute that is covered most often by given intervals
-const findMostAsleepMinute = intervals => {
+// returns minute most often covered by intervals, with sleep-count
+const findSleepiestMinute = intervals => {
   const minutes = new Array(60).fill(0)
 
   intervals.forEach(([ start, end ]) => {
     for (let i = start; i < end; i++) minutes[i]++
   })
 
-  return argMax(minutes)
+  const max = minutes.reduce((memo, n) => n > memo ? n : memo)
+  const argmax = minutes.indexOf(max)
+
+  return { value: argmax, count: max }
 }
 
 // returns the id of the most often asleep guard
@@ -54,12 +62,6 @@ const buildSleepMap = records => {
   return lookup
 }
 
-// returns the index of the (first) largest element
-const argMax = arr => {
-  const max = arr.reduce((memo, n) => n > memo ? n : memo)
-  return arr.indexOf(max)
-}
-
 // returns the sum of given minute-intervals
 const sumSleepTime = intervals => intervals.reduce((sum, i) => {
   sum += i[1] - i[0]
@@ -93,7 +95,7 @@ const parseEvent = event => {
 module.exports = {
   buildSleepMap,
   findMostAsleepGuard,
-  findMostAsleepMinute,
-  findTargetGuardAndMinute,
+  findSleepiestMinute,
+  findSleepiestGuardAndMinute,
   getRecords
 }

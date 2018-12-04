@@ -5,13 +5,12 @@
  */
 
 const {
-  findTargetGuardAndMinute,
+  findSleepiestGuardAndMinute,
   getRecords
 } = require('./repose')
 
 getRecords(records => {
-  const { guard, minute } = findTargetGuardAndMinute(records)
-  console.log(guard, minute)
+  const { guard, minute } = findSleepiestGuardAndMinute(records)
 
   console.log(`Day 4.1: guard ${guard} at ${minute} = ${guard * minute}`)
 })
