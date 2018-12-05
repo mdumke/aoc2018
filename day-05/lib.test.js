@@ -1,5 +1,5 @@
 const { test } = require('tap')
-const { computeReaction } = require('./lib')
+const { computeReaction, computeOptimizedReaction } = require('./lib')
 
 test('computeReaction', g => {
   g.test('a', t => {
@@ -77,11 +77,28 @@ test('computeReaction', g => {
     t.end()
   })
 
-  g.test('complex example', t => {
-    t.equal(
-      computeReaction('MmCcinNpPIuIMmXxMDQqSsdRrfFEJVvjerRMvOoVmFbAaBnNfCctTPpwWvJjMmDdctTTtRVvyYrzZtBmMNnbGgcCJJJjOooOpPfFHhjVeEvAaSsAajyYQhHqxHhXeETTQqttTLlEvVoOedDzZaAIiESseHsSDdPpXhHxhFVvSsQqfCbBmoHaAhIiOrRVvMDBbFLlfPhHdDtTpdJ'),
-      'uIMvJ'
-    )
+  g.end()
+})
+
+test('computeReaction with ignoreType', g => {
+  g.test('input a, ignore a', t => {
+    t.equal(computeReaction('aAbc', 'a'), 'bc')
+    t.end()
+  })
+
+  g.test('given example 1', t => {
+    const polymer = 'dabAcCaCBAcCcaDA'
+    t.equal(computeReaction(polymer, 'a'), 'dbCBcD')
+    t.end()
+  })
+
+  g.end()
+})
+
+test('computeOptimizedReaction', g => {
+  g.test('given example', t => {
+    const polymer = 'dabAcCaCBAcCcaDA'
+    t.equal(computeOptimizedReaction(polymer), 'daDA')
     t.end()
   })
 
