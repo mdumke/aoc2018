@@ -21,22 +21,22 @@ const computeOptimizedReaction = polymer => {
   return winner
 }
 
-// returns the polymer after removing matching pairs
+// returns the polymer after removing matching unit-pairs
 // ASSUMES: ignoreType is lowercase
 const computeReaction = (polymer, ignoreType = null) => {
   let result = []
-  let lastChar
+  let lastUnit
 
-  for (let char of polymer) {
-    if (char.toLowerCase() === ignoreType) continue
+  for (let unit of polymer) {
+    if (unit.toLowerCase() === ignoreType) continue
 
-    if (lastChar && isMatch(lastChar, char)) {
+    if (lastUnit && isMatch(lastUnit, unit)) {
       result.pop()
     } else {
-      result.push(char)
+      result.push(unit)
     }
 
-    lastChar = result[result.length - 1]
+    lastUnit = result[result.length - 1]
   }
 
   return result.join('')
