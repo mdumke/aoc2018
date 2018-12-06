@@ -5,6 +5,37 @@
 
 const fs = require('fs')
 
+// returns all coordinates with total distance less than maxDist
+const findSafeRegion = (coords, maxDist) => {
+  const { top, left, width, height } = findBoundary(coords)
+
+  const searchArea = {
+    top: 0,
+    left: 0,
+    width: left + maxDist,
+    height: top + maxDist
+  }
+
+  let safeRegion = []
+  let totalDist
+
+  for (let row = searchArea.top; row < searchArea.height; row++) {
+    for (let col = searchArea.left; col < searchArea.width; col++) {
+      totalDist = 0
+
+      for (let c of coords) {
+        totalDist += manhattan(c.top, c.left, row, col)
+
+        if (totalDist >= maxDist) break
+      }
+
+      if (totalDist < maxDist) safeRegion.push({ top: row, left: col })
+    }
+  }
+
+  return safeRegion
+}
+
 // returns the coordinates of the largest (finite) area of influence
 const findLargestFiniteArea = coords => {
   const boundary = findBoundary(coords)
@@ -136,6 +167,9 @@ const findBoundary = coords => {
   }
 }
 
+// returns the taxi-cab distance for two points
+const manhattan = (x1, y1, x2, y2) => Math.abs(x1 - x2) + Math.abs(y1 - y2)
+
 // returns a list of { top, left } coordinates
 const getCoordinates = cb => {
   fs.readFile('input.txt', 'utf8', (_, data) => {
@@ -161,6 +195,7 @@ const parseLine = line => {
 module.exports = {
   findBoundary,
   findClosestPoints,
+  findSafeRegion,
   getAreas,
   getBoundaryPoints,
   getCoordinates,

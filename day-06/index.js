@@ -6,9 +6,11 @@
 
 const {
   findLargestFiniteArea,
+  findSafeRegion,
   getCoordinates
 } = require('./lib')
 
 getCoordinates(coords => {
-  console.log(findLargestFiniteArea(coords).length)
+  console.log(`Day 6.1: ${findLargestFiniteArea(coords).length}`)
+  console.log(`Day 6.2: ${findSafeRegion(coords, 10000).length}`)
 })

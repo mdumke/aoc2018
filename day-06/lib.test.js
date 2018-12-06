@@ -4,7 +4,8 @@ const {
   getAreas,
   getBoundaryPoints,
   findClosestPoints,
-  findLargestFiniteArea
+  findLargestFiniteArea,
+  findSafeRegion
 } = require('./lib')
 
 test('findBoundary', g => {
@@ -300,6 +301,24 @@ test('findLargestFiniteArea', g => {
     ]
 
     t.same(findLargestFiniteArea(coords).length, 10)
+    t.end()
+  })
+
+  g.end()
+})
+
+test('findSafeRegion', g => {
+  g.test('given example', t => {
+    const coords = [
+      { left: 1, top: 1 },
+      { left: 1, top: 6 },
+      { left: 8, top: 3 },
+      { left: 3, top: 4 },
+      { left: 5, top: 5 },
+      { left: 8, top: 9 }
+    ]
+
+    t.equal(findSafeRegion(coords, 32).length, 16)
     t.end()
   })
 
