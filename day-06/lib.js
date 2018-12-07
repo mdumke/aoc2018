@@ -7,7 +7,7 @@ const fs = require('fs')
 
 // returns all coordinates with total distance less than maxDist
 const findSafeRegion = (coords, maxDist) => {
-  const { top, left, width, height } = findBoundary(coords)
+  const { top, left } = findBoundary(coords)
 
   const searchArea = {
     top: 0,
