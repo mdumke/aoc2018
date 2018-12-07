@@ -6,6 +6,12 @@
 const fs = require('fs')
 const Graph = require('./graph')
 
+// returns the total assemble time according to problem spec
+const computeAssemblyTime = (edges, numWorkers) =>
+  new Graph(edges, 26).assemble(numWorkers, node => {
+    return 60 + node + 1
+  })
+
 // returns a string of letters in correct execution order
 const findProcessingOrder = edges =>
   new Graph(edges, 26)
@@ -32,5 +38,6 @@ const numberToLetter = n => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[n]
 
 module.exports = {
   getEdges,
+  computeAssemblyTime,
   findProcessingOrder
 }
