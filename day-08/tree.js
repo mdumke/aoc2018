@@ -3,6 +3,8 @@
  *
  */
 
+const { sum, countByValue } = require('../utils')
+
 class Tree {
   constructor (data) {
     this.root = this.buildNode(data)
@@ -17,19 +19,20 @@ class Tree {
     return traverse(this.root)
   }
 
+  // returns value at the root according to problem spec
   computeRootValue () {
-    return this.computeValue(this.root)
+    const traverse = node => {
+      if (!node.children.length) return node.sumMetadata()
+
+      return node.children.map(traverse).reduce((sum, val, i) => {
+        return sum + val * node.metaValueCount(i + 1)
+      }, 0)
+    }
+
+    return traverse(this.root)
   }
 
-  computeValue (node) {
-    if (!node.children.length) return node.sumMetadata()
-    const values = node.children.map(this.computeValue.bind(this))
-
-    return node.meta.reduce((sum, i) => {
-      return sum + (i > 0 && i <= values.length ? values[i - 1] : 0)
-    }, 0)
-  }
-
+  // constructs (nested) nodes
   buildNode (data) {
     let nChild = data.shift()
     let nMeta = data.shift()
@@ -49,11 +52,13 @@ class Node {
     this.children = [...children]
   }
 
+  metaValueCount (value) {
+    return this.meta.reduce(countByValue, {})[value] || 0
+  }
+
   sumMetadata () {
     return this.meta.reduce(sum, 0)
   }
 }
-
-const sum = (memo, value) => memo + value
 
 module.exports = Tree
