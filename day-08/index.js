@@ -17,4 +17,5 @@ getTreeData(data => {
   const tree = new Tree(data)
 
   console.log(`Day 8.1: ${tree.sumMetadata()}`)
+  console.log(`Day 8.2: ${tree.computeRootValue()}`)
 })

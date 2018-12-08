@@ -2,14 +2,6 @@ const { test } = require('tap')
 const Tree = require('./tree')
 
 test('constructor', g => {
-  g.test('empty tree', t => {
-    const data = []
-    const tree = new Tree(data)
-
-    t.same(tree.root, null)
-    t.end()
-  })
-
   g.test('single root node', t => {
     const data = [0, 0]
     const tree = new Tree(data)
@@ -78,14 +70,6 @@ test('constructor', g => {
 })
 
 test('sumMetadata', g => {
-  g.test('empty tree', t => {
-    const data = []
-    const tree = new Tree(data)
-
-    t.equal(tree.sumMetadata(), 0)
-    t.end()
-  })
-
   g.test('single root node with metadata', t => {
     const data = [0, 2, 3, -1]
     const tree = new Tree(data)
@@ -99,6 +83,42 @@ test('sumMetadata', g => {
     const tree = new Tree(data)
 
     t.equal(tree.sumMetadata(), 138)
+    t.end()
+  })
+
+  g.end()
+})
+
+test('computeRootValue', g => {
+  g.test('single root node with metadata', t => {
+    const data = [0, 3, 3, 11, -1]
+    const tree = new Tree(data)
+
+    t.equal(tree.computeRootValue(), 13)
+    t.end()
+  })
+
+  g.test('root with one child', t => {
+    const data = [1, 4, 0, 2, -1, -1, 0, 1, 1, 2]
+    const tree = new Tree(data)
+
+    t.equal(tree.computeRootValue(), -4)
+    t.end()
+  })
+
+  g.test('depth 2 tree', t => {
+    const data = [1, 1, 1, 2, 0, 1, 2, 1, 1, 1]
+    const tree = new Tree(data)
+
+    t.equal(tree.computeRootValue(), 4)
+    t.end()
+  })
+
+  g.test('given example', t => {
+    const data = [2, 3, 0, 3, 10, 11, 12, 1, 1, 0, 1, 99, 2, 1, 1, 2]
+    const tree = new Tree(data)
+
+    t.equal(tree.computeRootValue(), 66)
     t.end()
   })
 
