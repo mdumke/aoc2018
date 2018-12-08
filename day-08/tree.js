@@ -8,15 +8,13 @@ class Tree {
     this.root = this.buildNode(data)
   }
 
+  // returns the sum of all metadata entries
   sumMetadata () {
-    const traverse = node => {
-      total += node.sumMetadata()
-      node.children.forEach(traverse)
-    }
+    const traverse = node => node.sumMetadata() + node
+      .children.map(traverse)
+      .reduce(sum, 0)
 
-    let total = 0
-    traverse(this.root)
-    return total
+    return traverse(this.root)
   }
 
   computeRootValue () {
@@ -52,8 +50,10 @@ class Node {
   }
 
   sumMetadata () {
-    return this.meta.reduce((memo, v) => memo + v, 0)
+    return this.meta.reduce(sum, 0)
   }
 }
+
+const sum = (memo, value) => memo + value
 
 module.exports = Tree
