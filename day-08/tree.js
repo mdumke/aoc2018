@@ -12,8 +12,7 @@ class Tree {
 
   // returns the sum of all metadata entries
   sumMetadata () {
-    const traverse = node => node.sumMetadata() + node
-      .children
+    const traverse = node => node.sumMetadata() + node.children
       .map(traverse)
       .reduce(sum, 0)
 
