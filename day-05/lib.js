@@ -6,20 +6,15 @@
 const fs = require('fs')
 
 // returns reacted polymer after removing best unit type
-const computeOptimizedReaction = polymer => {
-  let winner = polymer
-  let candidate
+const computeOptimizedReaction = polymer => 'abcdefghijklmnopqrstuvwxyz'
+  .split('')
+  .reduce((winner, char) => {
+    let candidate = computeReaction(polymer, char)
 
-  'abcdefghijklmnopqrstuvwxyz'.split('').forEach(type => {
-    candidate = computeReaction(polymer, type)
-
-    if (candidate.length < winner.length) {
-      winner = candidate
-    }
-  })
-
-  return winner
-}
+    return candidate.length < winner.length
+      ? candidate
+      : winner
+  }, polymer)
 
 // returns the polymer after removing matching unit-pairs
 // ASSUMES: ignoreType is lowercase
@@ -30,11 +25,9 @@ const computeReaction = (polymer, ignoreType = null) => {
   for (let unit of polymer) {
     if (unit.toLowerCase() === ignoreType) continue
 
-    if (lastUnit && isMatch(lastUnit, unit)) {
-      result.pop()
-    } else {
-      result.push(unit)
-    }
+    isMatch(lastUnit, unit)
+      ? result.pop()
+      : result.push(unit)
 
     lastUnit = result[result.length - 1]
   }
@@ -44,7 +37,7 @@ const computeReaction = (polymer, ignoreType = null) => {
 
 // returns true if c1 and c2 are the same char in different cases
 const isMatch = (c1, c2) =>
-  Math.abs(c1.charCodeAt(0) - c2.charCodeAt(0)) === 32
+  c1 && c2 && Math.abs(c1.charCodeAt(0) - c2.charCodeAt(0)) === 32
 
 // reads the polymer data from input.txt
 const getPolymer = cb =>
