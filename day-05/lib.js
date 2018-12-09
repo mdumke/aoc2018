@@ -12,7 +12,6 @@ const computeOptimizedReaction = polymer => {
 
   'abcdefghijklmnopqrstuvwxyz'.split('').forEach(ignoreType => {
     candidate = computeReaction(polymer, ignoreType)
-
     winner = candidate.length < winner.length
       ? candidate
       : winner
