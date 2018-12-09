@@ -6,15 +6,20 @@
 const fs = require('fs')
 
 // returns reacted polymer after removing best unit type
-const computeOptimizedReaction = polymer => 'abcdefghijklmnopqrstuvwxyz'
-  .split('')
-  .reduce((winner, char) => {
-    let candidate = computeReaction(polymer, char)
+const computeOptimizedReaction = polymer => {
+  let winner = polymer
+  let candidate
 
-    return candidate.length < winner.length
+  'abcdefghijklmnopqrstuvwxyz'.split('').forEach(ignoreType => {
+    candidate = computeReaction(polymer, ignoreType)
+
+    winner = candidate.length < winner.length
       ? candidate
       : winner
-  }, polymer)
+  })
+
+  return winner
+}
 
 // returns the polymer after removing matching unit-pairs
 // ASSUMES: ignoreType is lowercase
