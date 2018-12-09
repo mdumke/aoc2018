@@ -5,6 +5,7 @@
 
 // reducer helper functions
 const sum = (memo, value) => memo + value
+const max = (max, value) => Math.max(max, value)
 
 const countByValue = (lookup, v) => {
   lookup[v] = (lookup[v] || 0) + 1
@@ -13,5 +14,6 @@ const countByValue = (lookup, v) => {
 
 module.exports = {
   countByValue,
+  max,
   sum
 }
