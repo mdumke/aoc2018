@@ -1,3 +1,10 @@
+/*
+ * helper functions for finding the message in the sky
+ *
+ */
+
+const fs = require('fs')
+
 // returns the points when they are in message-position
 const findMessage = (points, velocities) => {
   let candidates = points
@@ -51,8 +58,28 @@ const advance = (points, velocities) =>
 const rollback = (points, velocities) =>
   points.map(([ x, y ], i) => [x - velocities[i][0], y - velocities[i][1]])
 
+const parse = line =>
+  line.match(/< ?(\S+),  ?(\S+)>.*< ?(\S+),  ?(\S+)>/).slice(1).map(Number)
+
+const getInput = cb => {
+  fs.readFile('input.txt', 'utf8', (_, data) => {
+    const input = data
+      .trim()
+      .split('\n')
+      .map(parse)
+      .reduce((acc, [ x, y, vx, vy ]) => {
+        acc.points.push([x, y])
+        acc.velocities.push([vx, vy])
+        return acc
+      }, { points: [], velocities: [] })
+
+    cb(input)
+  })
+}
+
 module.exports = {
   advance,
   getHeight,
+  getInput,
   findMessage
 }
