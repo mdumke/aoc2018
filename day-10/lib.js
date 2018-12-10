@@ -4,34 +4,35 @@
  */
 
 const fs = require('fs')
+const { max, min } = require('../utils')
 
 // returns the points when they are in message-position
 const findMessage = (points, velocities) => {
-  let candidates = points
+  let height = getHeight(points)
+  let prevHeight
   let seconds = 0
 
-  let prevHeight = Infinity
-  let height = getHeight(points)
-
+  // step until height gets bigger again
   while (true) {
     prevHeight = height
-    height = getHeight(candidates)
+    height = getHeight(points)
 
     if (height > prevHeight) break
 
-    candidates = advance(candidates, velocities)
+    points = advance(points, velocities)
     seconds++
   }
 
+  // take a step back, to when height was smallest
   return {
     seconds: seconds - 1,
-    show: display(rollback(candidates, velocities)) }
+    show: display(advance(points, velocities, -1)) }
 }
 
+// returns a display-string with the message
 const display = points => {
   const top = getTop(points)
   const left = getLeft(points)
-
   const height = getHeight(points)
   const width = getWidth(points)
 
@@ -45,37 +46,38 @@ const display = points => {
 const getHeight = points => Math.abs(getTop(points) - getBottom(points))
 const getWidth = points => Math.abs(getLeft(points) - getRight(points))
 
-const getTop = points => Math.min(...points.map(([ x, y ]) => y))
-const getBottom = points => Math.max(...points.map(([ x, y ]) => y))
-const getLeft = points => Math.min(...points.map(([ x, y ]) => x))
-const getRight = points => Math.max(...points.map(([ x, y ]) => x))
+const getTop = points => points.map(([ x, y ]) => y).reduce(min)
+const getBottom = points => points.map(([ x, y ]) => y).reduce(max)
+const getLeft = points => points.map(([ x, y ]) => x).reduce(min)
+const getRight = points => points.map(([ x, y ]) => x).reduce(max)
 
-// returns a list of points after one timestep
-const advance = (points, velocities) =>
-  points.map(([ x, y ], i) => [x + velocities[i][0], y + velocities[i][1]])
-
-// returns a list of points one timestep before
-const rollback = (points, velocities) =>
-  points.map(([ x, y ], i) => [x - velocities[i][0], y - velocities[i][1]])
-
-const parse = line =>
-  line.match(/< ?(\S+),  ?(\S+)>.*< ?(\S+),  ?(\S+)>/).slice(1).map(Number)
-
-const getInput = cb => {
-  fs.readFile('input.txt', 'utf8', (_, data) => {
-    const input = data
-      .trim()
-      .split('\n')
-      .map(parse)
-      .reduce((acc, [ x, y, vx, vy ]) => {
-        acc.points.push([x, y])
-        acc.velocities.push([vx, vy])
-        return acc
-      }, { points: [], velocities: [] })
-
-    cb(input)
-  })
+// returns points after adding velocities, direction is 1 or -1 (backwards)
+const advance = (points, velocities, direction = 1) => {
+  return points.map(([ x, y ], i) => [
+    x + velocities[i][0] * direction,
+    y + velocities[i][1] * direction
+  ])
 }
+
+// input helpers
+const getInput = cb =>
+  fs.readFile('input.txt', 'utf8', (_, data) => cb(parseInput(data)))
+
+const parseInput = data =>
+  data.trim().split('\n').reduce((acc, line) => {
+    const [ x, y, vx, vy ] = parseLine(line)
+
+    return {
+      points: [...acc.points, [x, y]],
+      velocities: [...acc.velocities, [vx, vy]]
+    }
+  }, { points: [], velocities: [] })
+
+const parseLine = line =>
+  line
+    .match(/< ?(\S+),  ?(\S+)>.*< ?(\S+),  ?(\S+)>/)
+    .slice(1)
+    .map(Number)
 
 module.exports = {
   advance,
