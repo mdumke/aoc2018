@@ -3,6 +3,9 @@
  *
  */
 
+// sort helper function
+const ascending = (x, y) => x - y
+
 // reducer helper functions
 const sum = (memo, value) => memo + value
 const max = (max, value) => Math.max(max, value)
@@ -14,8 +17,5 @@ const countByValue = (lookup, v) => {
 }
 
 module.exports = {
-  countByValue,
-  max,
-  min,
-  sum
+  ascending, countByValue, max, min, sum
 }

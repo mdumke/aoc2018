@@ -4,7 +4,7 @@
  */
 
 const fs = require('fs')
-const { max, min } = require('../utils')
+const { min, ascending } = require('../utils')
 
 // returns the points when they are in message-position
 const findMessage = (points, velocities) => {
@@ -26,37 +26,42 @@ const findMessage = (points, velocities) => {
   // take a step back, to when height was smallest
   return {
     seconds: seconds - 1,
-    show: display(advance(points, velocities, -1)) }
+    show: display(advance(points, velocities, -1))
+  }
 }
 
 // returns a display-string with the message
 const display = points => {
-  const top = getTop(points)
-  const left = getLeft(points)
-  const height = getHeight(points)
-  const width = getWidth(points)
+  const top = points.map(p => p.y).reduce(min)
+  const left = points.map(p => p.x).reduce(min)
 
-  let msg = Array.from(Array(height + 1), () => Array(width + 1).fill(' '))
-  points.forEach(([ x, y ]) => { msg[y - top][x - left] = '#' })
+  let message = Array.from(Array(getHeight(points) + 1), () =>
+    Array(getWidth(points) + 1).fill(' ')
+  )
 
-  return msg.reduce((memo, row) => memo + row.join('') + '\n', '')
+  points.forEach(({ x, y }) => { message[y - top][x - left] = '#' })
+
+  return message.reduce((memo, row) => memo + row.join('') + '\n', '')
 }
-
-// dimensions helpers
-const getHeight = points => Math.abs(getTop(points) - getBottom(points))
-const getWidth = points => Math.abs(getLeft(points) - getRight(points))
-
-const getTop = points => points.map(([ x, y ]) => y).reduce(min)
-const getBottom = points => points.map(([ x, y ]) => y).reduce(max)
-const getLeft = points => points.map(([ x, y ]) => x).reduce(min)
-const getRight = points => points.map(([ x, y ]) => x).reduce(max)
 
 // returns points after adding velocities, direction is 1 or -1 (backwards)
 const advance = (points, velocities, direction = 1) => {
-  return points.map(([ x, y ], i) => [
-    x + velocities[i][0] * direction,
-    y + velocities[i][1] * direction
-  ])
+  return points.map(({ x, y }, i) => ({
+    x: x + velocities[i].x * direction,
+    y: y + velocities[i].y * direction
+  }))
+}
+
+// returns the height of the enclosing rectangle
+const getHeight = points => {
+  const sorted = points.map(p => p.y).sort(ascending)
+  return Math.abs(sorted[0] - sorted[points.length - 1])
+}
+
+// returns the width of the enclosing rectangle
+const getWidth = points => {
+  const sorted = points.map(p => p.x).sort(ascending)
+  return Math.abs(sorted[0] - sorted[points.length - 1])
 }
 
 // input helpers
@@ -68,8 +73,8 @@ const parseInput = data =>
     const [ x, y, vx, vy ] = parseLine(line)
 
     return {
-      points: [...acc.points, [x, y]],
-      velocities: [...acc.velocities, [vx, vy]]
+      points: [...acc.points, { x, y }],
+      velocities: [...acc.velocities, { x: vx, y: vy }]
     }
   }, { points: [], velocities: [] })
 
@@ -81,6 +86,7 @@ const parseLine = line =>
 
 module.exports = {
   advance,
+  display,
   getHeight,
   getInput,
   findMessage
