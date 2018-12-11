@@ -1,12 +1,14 @@
 const { test } = require('tap')
-const { findLargestPatchOfAnySize } = require('./lib')
+const { getFuelGrid, findLargestPatchOfAnySize } = require('./lib')
 
 test('given example 1', t => {
-  t.same(findLargestPatchOfAnySize(18), [90, 269, 16])
+  const grid = getFuelGrid(18)
+  t.same(findLargestPatchOfAnySize(grid), [90, 269, 16])
   t.end()
 })
 
 test('given example 2', t => {
-  t.same(findLargestPatchOfAnySize(42), [232, 251, 12])
+  const grid = getFuelGrid(42)
+  t.same(findLargestPatchOfAnySize(grid), [232, 251, 12])
   t.end()
 })
