@@ -1,16 +1,12 @@
 const { test } = require('tap')
-const { sumPatch } = require('./lib')
+const { findLargestPatchOfAnySize } = require('./lib')
 
-test('sumPatch', g => {
-  g.test('given example 1', t => {
-    t.equal(sumPatch(33, 45, 18), 29)
-    t.end()
-  })
+test('given example 1', t => {
+  t.same(findLargestPatchOfAnySize(18), [90, 269, 16])
+  t.end()
+})
 
-  g.test('given example 2', t => {
-    t.equal(sumPatch(21, 61, 42), 30)
-    t.end()
-  })
-
-  g.end()
+test('given example 2', t => {
+  t.same(findLargestPatchOfAnySize(42), [232, 251, 12])
+  t.end()
 })
