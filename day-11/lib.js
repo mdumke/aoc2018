@@ -4,8 +4,7 @@
  */
 
 // returns the top-left corner and size of the largest possible patch
-const findLargestPatchOfAnySize = serialNumber => {
-  const grid = getFuelGrid(serialNumber)
+const findLargestPatchOfAnySize = grid => {
   let max = { level: -Infinity }
 
   for (let size = 1; size < 300; size++) {
