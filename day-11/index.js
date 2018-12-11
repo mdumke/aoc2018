@@ -14,4 +14,4 @@ const serialNumber = 5034
 const grid = getFuelGrid(serialNumber)
 
 console.log(`Day 11.1: ${findLargestPatch(3, grid)}`)
-console.log(`Day 11.2: ${findLargestPatchOfAnySize(5034)}`)
+console.log(`Day 11.2: ${findLargestPatchOfAnySize(serialNumber)}`)
