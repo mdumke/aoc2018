@@ -6,43 +6,33 @@
 // returns the top-left corner and size of the largest possible patch
 const findLargestPatchOfAnySize = serialNumber => {
   const grid = getFuelGrid(serialNumber)
-  let maxLevel = -Infinity
-  let maxRow, maxCol, maxSize
+  let max = { level: -Infinity }
 
   for (let size = 1; size < 300; size++) {
     const [ col, row, level ] = findLargestPatch(size, grid)
 
-    if (level > maxLevel) {
-      maxLevel = level
-      maxSize = size
-      maxRow = row
-      maxCol = col
-    }
-
+    if (level > max.level) max = { level, col, row, size }
     if (level < 0) break
   }
 
-  return [maxCol, maxRow, maxSize]
+  return [max.col, max.row, max.size]
 }
 
 // returns the top-left corner of the largest sizexsize patch
 const findLargestPatch = (size, grid) => {
-  let currentLevel, row, col
-  let maxLevel = -Infinity
+  let max = { level: -Infinity }
 
-  for (let i = 0; i < 300 - size; i++) {
-    for (let j = 0; j < 300 - size; j++) {
-      currentLevel = sumPatchAt(i, j, size, grid)
+  for (let row = 0; row < 300 - size; row++) {
+    for (let col = 0; col < 300 - size; col++) {
+      const level = sumPatchAt(row, col, size, grid)
 
-      if (currentLevel > maxLevel) {
-        maxLevel = currentLevel
-        row = i
-        col = j
+      if (level > max.level) {
+        max = { level, row, col }
       }
     }
   }
 
-  return [col + 1, row + 1, maxLevel]
+  return [max.col + 1, max.row + 1, max.level]
 }
 
 // returns the sum of specified sizexsize patch
