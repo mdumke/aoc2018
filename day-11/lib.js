@@ -49,23 +49,14 @@ const sumPatchAt = (x, y, size, grid) => {
 
 // return the 300x300 grid for the given serial number
 const getFuelGrid = serial => {
-  const size = 300
-  const idOffset = 11
+  const grid = Array.from(Array(300), () => Array(300).fill(null))
+  return grid.map((row, i) => row.map((col, j) => getCellFuel(i, j, serial)))
+}
 
-  const rackIds = Array.from(Array(size), () => {
-    return Array(size).fill(null).map((_, i) => idOffset + i)
-  })
-  const ys = Array(size).fill(null).map((_, i) => Array(size).fill(1 + i))
-  const hundreds = patch => patch.map(row => row.map(n => {
-    return Number(n.toString().split('').reverse()[2] || 0)
-  }))
-  const multiply = (p1, p2) => p1.map((row, i) => row.map((v, j) => v * p2[i][j]))
-  const addConst = (p, c) => p.map(row => row.map(v => v + c))
-
-  return addConst(
-    hundreds(multiply(addConst(multiply(rackIds, ys), serial), rackIds)),
-    -5
-  )
+// returns the fuel level of the given (0-indexed!) cell
+const getCellFuel = (row, col, serial) => {
+  const id = col + 1 + 10
+  return Math.floor(((id * (row + 1) + serial) * id) / 100 % 10) - 5
 }
 
 module.exports = {
