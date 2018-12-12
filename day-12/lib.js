@@ -49,7 +49,7 @@ const step = (state, offset, rules) => {
   for (left = 0; left < after.length && after[left] === '.'; left++);
   for (right = after.length - 1; right > 0 && after[right] === '.'; right--);
 
-  // edge case: no flowers left
+  // edge case: no plants left
   if (left === after.length) return ['.', 0]
 
   return [after.substr(left, right - left + 1), offset - 2 + left]
