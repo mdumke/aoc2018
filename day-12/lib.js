@@ -3,6 +3,8 @@
  *
  */
 
+const { sum } = require('../utils')
+
 // returns the specimen and 0-position after n generations
 const evolve = (init, n, rules) => {
   let newState, newOffset
@@ -26,11 +28,11 @@ const evolve = (init, n, rules) => {
   return [state, offset]
 }
 
-// return the sum of state ids (considering left pad) that have a plant
+// returns the sum of pot ids (considering offset) that have a plant
 const evaluate = (state, offset) => state
   .split('')
   .map((v, i) => v === '#' ? offset + i : 0)
-  .reduce((sum, i) => sum + i, 0)
+  .reduce(sum)
 
 // returns state and offset after one step of evolution
 const step = (state, offset, rules) => {
@@ -47,8 +49,8 @@ const step = (state, offset, rules) => {
   for (left = 0; left < after.length && after[left] === '.'; left++);
   for (right = after.length - 1; right > 0 && after[right] === '.'; right--);
 
+  // edge case: no flowers left
   if (left === after.length) return ['.', 0]
-  if (left === right) return ['#', 0]
 
   return [after.substr(left, right - left + 1), offset - 2 + left]
 }
