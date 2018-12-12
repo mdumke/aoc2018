@@ -21,32 +21,42 @@ const rules = {
 }
 
 test('step', g => {
-  g.test('.....', t => {
-    t.same(step('.....', rules), '.....')
+  g.test('.', t => {
+    t.same(step('.', 0, rules), ['.', 0])
     t.end()
   })
 
-  g.test('..#..', t => {
-    t.same(step('..#..', rules), '..#..')
+  g.test('#', t => {
+    t.same(step('#', 0, rules), ['##', 0])
     t.end()
   })
 
-  g.test('..##..', t => {
-    t.same(step('..##..', rules), '...#..')
+  g.test('##', t => {
+    t.same(step('##', 0, rules), ['#.#', -1])
+    t.end()
+  })
+
+  g.test('## with offset', t => {
+    t.same(step('##', -5, rules), ['#.#', -6])
+    t.end()
+  })
+
+  g.test('stationary', t => {
+    t.same(step('#.#', 0, rules), ['#.#', 1])
     t.end()
   })
 
   g.test('given example 1', t => {
     t.same(
-      step('...#..#.#..##......###...###...........', rules),
-      '...#...#....#.....#..#..#..#...........')
+      step('#..#.#..##......###...###', 0, rules),
+      ['#...#....#.....#..#..#..#', 0])
     t.end()
   })
 
   g.test('given example 5', t => {
     t.same(
-      step('....#...##...#.#..#..#...#...#.........', rules),
-      '....##.#.#....#...#..##..##..##........')
+      step('#...##...#.#..#..#...#...#', 1, rules),
+      ['##.#.#....#...#..##..##..##', 1])
     t.end()
   })
 
@@ -57,24 +67,29 @@ test('evolve', g => {
   g.test('given example 1', t => {
     t.same(
       evolve('#..#.#..##......###...###', 1, rules),
-      ['..#...#....#.....#..#..#..#..', 2]
+      ['#...#....#.....#..#..#..#', 0]
     )
     t.end()
   })
 
   g.test('given example 2', t => {
     t.same(
-      evolve('#..#.#..##......###...###', 2, rules),
-      ['....##..##...##....#..#..#..##...', 4]
+      evolve('#..#.#..##......###...###', 3, rules),
+      ['#.#...#..#.#....#..#..#...#', -1]
     )
     t.end()
   })
 
-  g.test('given example 4', t => {
+  g.test('given example 20', t => {
     t.same(
-      evolve('#..#.#..##......###...###', 4, rules),
-      ['........#.#..#...#.#...#..#..##..##......', 8]
+      evolve('#..#.#..##......###...###', 20, rules),
+      ['#....##....#####...#######....#.#..##', -2]
     )
+    t.end()
+  })
+
+  g.test('stationary', t => {
+    t.same(evolve('#.#', 3, rules), ['#.#', 3])
     t.end()
   })
 
@@ -83,14 +98,14 @@ test('evolve', g => {
 
 test('evaluate', g => {
   g.test('given example 1', t => {
-    t.equal(evaluate('....#...#....#.....#..#..#..#....', 4), 91)
+    t.equal(evaluate('#...#....#.....#..#..#..#', 0), 91)
     t.end()
   })
 
   g.test('given example 2', t => {
-    const [ state, pad ] = evolve(init, 20, rules)
+    const [ state, offset ] = evolve(init, 20, rules)
 
-    t.equal(evaluate(state, pad), 325)
+    t.equal(evaluate(state, offset), 325)
     t.end()
   })
 
