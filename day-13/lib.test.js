@@ -1,5 +1,11 @@
 const { test, only } = require('tap')
-const { findFirstCollision, parseInput, Cart } = require('./lib')
+const {
+  removeCollidingCarts,
+  findLastStandingCart,
+  findFirstCollision,
+  parseInput,
+  Cart
+} = require('./lib')
 
 const example1 = [
   '/->-\\        ',
@@ -8,6 +14,16 @@ const example1 = [
   '| | |  | v  |',
   '\\-+-/  \\-+--/',
   '  \\------/   '
+]
+
+const example2 = [
+  '/>-<\\  ',
+  '|   |  ',
+  '| /<+-\\',
+  '| | | v',
+  '\\>+</ |',
+  '  |   ^',
+  '  \\<->/'
 ]
 
 test('Cart', g => {
@@ -91,7 +107,12 @@ test('Cart', g => {
 
 test('findFirstCollision', g => {
   const { tracks, carts } = parseInput(example1)
-
   g.same(findFirstCollision(tracks, carts), [3, 7])
   g.end()
+})
+
+test('findLastStandingCart', t => {
+  const { tracks, carts } = parseInput(example2)
+  t.same(findLastStandingCart(tracks, carts), [4, 6])
+  t.end()
 })
