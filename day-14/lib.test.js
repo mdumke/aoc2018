@@ -1,5 +1,5 @@
 const { test } = require('tap')
-const { generateRecipes } = require('./lib')
+const { findPattern, generateRecipes } = require('./lib')
 
 test('generateRecipes', g => {
   g.test('given example 1', t => {
@@ -25,3 +25,26 @@ test('generateRecipes', g => {
   g.end()
 })
 
+test('findPattern', g => {
+  g.test('given example 1', t => {
+    t.equal(findPattern('51589'), 9)
+    t.end()
+  })
+
+  g.test('given example 2', t => {
+    t.equal(findPattern('01245'), 5)
+    t.end()
+  })
+
+  g.test('given example 3', t => {
+    t.equal(findPattern('92510'), 18)
+    t.end()
+  })
+
+  g.test('given example 4', t => {
+    t.equal(findPattern('59414'), 2018)
+    t.end()
+  })
+
+  g.end()
+})
