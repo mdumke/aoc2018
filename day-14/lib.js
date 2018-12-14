@@ -1,53 +1,47 @@
 /*
- * Compute recipe combinations and score them
+ * Compute recipe combinations and score them according to spec
  *
  */
 
 // returns the necessary number of trials before pattern appears
 const findPattern = pattern => {
-  let arr = new Int8Array(2)
-
-  arr[0] = 3
-  arr[1] = 7
-
+  let arr = new Int8Array([3, 7])
   let workers = [0, 1]
+  let length = 2
   let score
-  let current = 2
 
   while (true) {
-    // combine recipes, add score
     score = combineRecipes(arr, workers)
 
     // make sure array is still large enough
-    if (current + score.length > arr.length) {
+    if (length + score.length > arr.length) {
       arr = doubleArraySize(arr)
     }
 
-    // add new score
+    // append new score
     for (let i = 0; i < score.length; i++) {
-      arr[current + i] = score[i]
+      arr[length + i] = score[i]
     }
 
-    current += score.length
+    length += score.length
+    workers = advanceWorkers(workers, arr, length)
 
-    // advance workers
-    workers = advanceWorkers(workers, arr, current)
-
-    if (hasPattern(arr, current, pattern)) break
-    if (score.length === 2 && hasPattern(arr, current - 1, pattern)) {
-      current--
+    if (hasPattern(arr, length, pattern)) break
+    if (score.length === 2 && hasPattern(arr, length - 1, pattern)) {
+      length--
       break
     }
   }
 
-  return current - pattern.length
+  return length - pattern.length
 }
 
-// returns true if the last digits before current hold the given pattern
-const hasPattern = (arr, current, pattern) => {
-  if (current < pattern.length) return false
-
-  return arr.slice(current - pattern.length, current).join('') === pattern
+// returns true if the last digits hold the given pattern
+const hasPattern = (arr, length, pattern) => {
+  return (
+    pattern.length < length &&
+    arr.slice(length - pattern.length, length).join('') === pattern
+  )
 }
 
 // returns a copy of arr of double size, filled with trailing 0s
@@ -72,7 +66,7 @@ const generateRecipes = numTrials => {
   let score
   let current = 2
 
-  while (numTrials-- > 0 - 10) {
+  while (numTrials-- > -10) {
     // combine recipes, add score
     score = combineRecipes(arr, workers)
 
@@ -81,15 +75,13 @@ const generateRecipes = numTrials => {
     }
 
     current += score.length
-
-    // advance workers
     workers = advanceWorkers(workers, arr, current)
   }
 
   return arr.slice(numTrials + 1).join('')
 }
 
-// returns array of digits, the result of combining current recipes
+// returns array of digits, the score of combining current recipes
 const combineRecipes = (arr, workers) => {
   let score = arr[workers[0]] + arr[workers[1]]
 
