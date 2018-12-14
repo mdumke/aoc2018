@@ -96,8 +96,6 @@ const combineRecipes = (arr, workers) => {
   return score < 10
     ? [score]
     : [Math.floor(score / 10), score % 10]
-
-  return [score]
 }
 
 // returns the workers at their new positions

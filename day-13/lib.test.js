@@ -1,6 +1,5 @@
-const { test, only } = require('tap')
+const { test } = require('tap')
 const {
-  removeCollidingCarts,
   findLastStandingCart,
   findFirstCollision,
   parseInput,
