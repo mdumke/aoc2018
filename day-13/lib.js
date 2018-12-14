@@ -8,7 +8,7 @@ const fs = require('fs')
 // removes the last cart on the track after crashing carts removed
 const findLastStandingCart = (tracks, carts) => {
   while (carts.length > 1) {
-    carts = tick(tracks, sortCarts(carts))
+    carts = tick(tracks, sortCarts(carts, tracks[0].length))
   }
 
   return [carts[0].x, carts[0].y]
@@ -35,8 +35,8 @@ const tick = (tracks, carts) => {
 }
 
 // returns carts sorted from left to right, then top to bottom
-const sortCarts = carts => carts
-  .sort((c1, c2) => (c1.x * 10000 + c1.y) - (c2.x * 10000 + c2.y))
+const sortCarts = (carts, boardSize) => carts
+  .sort((c1, c2) => (c1.x * boardSize + c1.y) - (c2.x * boardSize + c2.y))
 
 // returns array of all cart-ids to remove
 const findCollidingCarts = carts => {
