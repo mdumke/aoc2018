@@ -1,5 +1,6 @@
-const { test } = require('tap')
-const { Board } = require('./lib')
+const { test, only } = require('tap')
+const { Board } = require('./board')
+const { computeBattleOutcome, simulateBattle, findOptimalStrength } = require('./lib')
 const { sum } = require('../utils')
 
 const field1 = `
@@ -83,6 +84,24 @@ const field8 = `
 #.....G.#
 #########
 `
+const field10 = `
+#########
+#......G#
+#...###.#
+#G....#.#
+#....E..#
+#########
+`
+
+test('move to in-range positions', t => {
+  const board = new Board(field10)
+
+  board.move(board.units[2])
+
+  t.equal(board.units[2].x, 4)
+  t.equal(board.units[2].y, 6)
+  t.end()
+})
 
 test('move unit', t => {
   const board = new Board(field1)
@@ -216,23 +235,7 @@ test('attack', g => {
   g.end()
 })
 
-test('given examples', g => {
-  const simulateBattle = board => {
-    let round = 0
-
-    while (++round) {
-      board.sortUnits()
-
-      for (let i = 0; i < board.units.length; i++) {
-        if (board.isFinished()) return round
-        if (board.units[i] === null) continue
-
-        board.move(board.units[i])
-        board.attack(board.units[i])
-      }
-    }
-  }
-
+test('simulateBattle', g => {
   g.test('example 1', t => {
     const board = new Board(field3)
 
@@ -290,6 +293,55 @@ test('given examples', g => {
     const hps = board.units.filter(Boolean).map(u => u.hp).reduce(sum)
 
     t.equal(fullRounds * hps, 18740)
+    t.end()
+  })
+
+  g.end()
+})
+
+test('findOptimalStrength', g => {
+  g.test('example 1', t => {
+    const strength = findOptimalStrength(field3)
+    const outcome = computeBattleOutcome(field3, strength)
+
+    t.equal(strength, 15)
+    t.equal(outcome, 4988)
+    t.end()
+  })
+
+  g.skip('example 2', t => {
+    const strength = findOptimalStrength(field5)
+    const outcome = computeBattleOutcome(field5, strength)
+
+    t.equal(strength, 4)
+    t.equal(outcome, 31284)
+    t.end()
+  })
+
+  g.test('example 3', t => {
+    const strength = findOptimalStrength(field6)
+    const outcome = computeBattleOutcome(field6, strength)
+
+    t.equal(strength, 15)
+    t.equal(outcome, 3478)
+    t.end()
+  })
+
+  g.test('example 4', t => {
+    const strength = findOptimalStrength(field7)
+    const outcome = computeBattleOutcome(field7, strength)
+
+    t.equal(strength, 12)
+    t.equal(outcome, 6474)
+    t.end()
+  })
+
+  g.test('example 5', t => {
+    const strength = findOptimalStrength(field8)
+    const outcome = computeBattleOutcome(field8, strength)
+
+    t.equal(strength, 34)
+    t.equal(outcome, 1140)
     t.end()
   })
 
