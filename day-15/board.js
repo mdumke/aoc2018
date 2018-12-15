@@ -23,9 +23,9 @@ class Board {
     if (this.isInRange(unit)) return
 
     let targets = this.getGoalStates(unit)
-    let fringe = [{ depth: 0, path: [{ x: unit.x, y: unit.y }]}]
+    let fringe = [{ depth: 0, path: [{ x: unit.x, y: unit.y }] }]
     let visited = {}
-    let current, pos, depth
+    let current, pos
 
     while (fringe.length) {
       current = fringe[0]

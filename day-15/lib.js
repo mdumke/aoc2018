@@ -12,7 +12,7 @@ const findOptimalStrength = data => {
   let strength = 4
 
   while (strength++) {
-    board = new Board(data, strength)
+    const board = new Board(data, strength)
     simulateBattle(board)
 
     if (board.numElfs === initialNumElfs) break
