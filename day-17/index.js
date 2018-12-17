@@ -16,4 +16,5 @@ readData(scan => {
   field.fill()
 
   console.log(`Day 17.1: ${field.countWater()}`)
+  console.log(`Day 17.2: ${field.countWater(['~'])}`)
 })

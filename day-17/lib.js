@@ -109,12 +109,12 @@ class Field {
     return matrix
   }
 
-  countWater () {
+  countWater (symbols = ['|', '~']) {
     let sum = 0
 
     for (let row = 1; row < this.matrix.length - 1; row++) {
       for (let col = 0; col < this.matrix[0].length; col++) {
-        sum += Number(['|', '~'].includes(this.matrix[row][col]))
+        sum += Number(symbols.includes(this.matrix[row][col]))
       }
     }
 
