@@ -1,3 +1,8 @@
+/*
+ * Field class manages resources, helper function
+ *
+ */
+
 class Field {
   constructor (data) {
     this.matrix = data.trim().split('\n').map(row => row.split(''))
@@ -72,6 +77,36 @@ class Field {
 
     return adj
   }
+
+  display () {
+    let show = ''
+
+    this.matrix.forEach(row => {
+      show += row.join('')
+      show += '\n'
+    })
+
+    console.log(show)
+  }
 }
 
-module.exports = { Field }
+// returns first occurence of a repeating pattern and its cycle length
+const findPeriod = data => {
+  const field = new Field(data)
+  let memory = {}
+  let hash
+
+  // keep track of which fields have occured so far
+  for (let i = 0; true; i++) {
+    field.tick()
+    hash = field.matrix.map(row => row.join('')).join('')
+
+    if (memory[hash]) {
+      return { first: memory[hash], length: i - memory[hash] }
+    }
+
+    memory[hash] = i
+  }
+}
+
+module.exports = { Field, findPeriod }
