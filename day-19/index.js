@@ -10,24 +10,25 @@ const CPU = require('./cpu')
 
 // the disassembled function
 const computeMagic = n => {
-  let a, b, c, e
+  // registers 0, 1, 3, 5
+  let a, b, c, d
 
   a = 0
   c = 1
 
   while (true) {
-    e = 1
+    d = 1
 
     while (true) {
-      b = c * e
+      b = c * d
 
       if (b === n) {
         a += c
       }
 
-      e++
+      d++
 
-      if (e > n) {
+      if (d > n) {
         c++
 
         if (c > n) return a
