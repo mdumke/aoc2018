@@ -4,14 +4,13 @@
  */
 
 class CPU {
-  constructor (registers = [0, 0, 0, 0, 0, 0]) {
+  constructor (ipRegister, registers = [0, 0, 0, 0, 0, 0]) {
     this.registers = [...registers]
-    this.ipRegister = null
+    this.ipRegister = ipRegister
   }
 
   // runs the given instructions
-  execute (program, ipRegister = 0, ticks = -1) {
-    this.ipRegister = ipRegister
+  execute (program, ticks = -1) {
     let ip = 0
 
     while (ticks-- && program[ip]) {

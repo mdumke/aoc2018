@@ -2,7 +2,7 @@ const { test } = require('tap')
 const CPU = require('./cpu')
 
 test('example', g => {
-  const cpu = new CPU()
+  const cpu = new CPU(0)
 
   const instructions = [
     ['seti', 5, 0, 1],
@@ -14,7 +14,7 @@ test('example', g => {
     ['seti', 9, 0, 5]
   ]
 
-  cpu.execute(instructions, 0)
+  cpu.execute(instructions)
   g.same(cpu.registers, [6, 5, 6, 0, 0, 9])
   g.end()
 })

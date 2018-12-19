@@ -66,15 +66,15 @@ readProgram(program => {
   const ipRegister = 4
 
   // part 1
-  const cpu = new CPU()
+  const cpu = new CPU(ipRegister)
 
-  cpu.execute(program, ipRegister)
+  cpu.execute(program)
   console.log(`Day 19.1: ${cpu.registers[0]}`)
 
   // part 2: register 0 will hold the sum of divisors
-  const cpu2 = new CPU([1, 0, 0, 0, 0, 0])
+  const cpu2 = new CPU(ipRegister, [1, 0, 0, 0, 0, 0])
 
   assert(computeSumOfDivisors(12345) === computeMagic(12345), 'sanity check')
-  cpu2.execute(program, ipRegister, 19)
+  cpu2.execute(program, 19)
   console.log(`Day 19.2: ${computeSumOfDivisors(cpu2.registers[2])}`)
 })
