@@ -4,10 +4,7 @@
  * Problem statement: adventofcode.com/2018/day/21
  */
 
-// too high: 16744756
-
 const fs = require('fs')
-const assert = require('assert')
 const CPU = require('./cpu')
 
 // get assembler code
@@ -24,9 +21,11 @@ const readProgram = cb => {
 // puzzle solutions
 readProgram(program => {
   const ipRegister = 4
+  const cpu = new CPU(ipRegister)
 
-  // part 1
-  const cpu = new CPU(ipRegister, [0, 0, 0, 0, 0, 0])
-  const candidates = cpu.getHaltingValues(program, 100000)
-  console.log(`Day 20.1: ${candidates[0]}`)
+  // brute force: this may take a minute to run
+  const haltingValues = cpu.getHaltingValues(program)
+
+  console.log(`Day 21.1: ${haltingValues[0]}`)
+  console.log(`Day 21.2: ${haltingValues[haltingValues.length - 1]}`)
 })

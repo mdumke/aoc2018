@@ -10,12 +10,19 @@ class CPU {
   }
 
   // returns all values for which instruction 28 would end the program
-  getHaltingValues (program, ticks = -1) {
+  getHaltingValues (program) {
     let values = []
+    let lookup = {}
+
     let ip = 0
 
-    while (ticks-- && program[ip]) {
-      if (ip === 28) values.push(this.registers[3])
+    while (program[ip]) {
+      if (ip === 28) {
+        if (lookup[this.registers[3]]) return values
+
+        values.push(this.registers[3])
+        lookup[this.registers[3]] = true
+      }
 
       ip = this.tick(program[ip], ip)
       ip++
