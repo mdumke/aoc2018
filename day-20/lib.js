@@ -30,7 +30,6 @@ class Graph {
 
     while (fringe.length) {
       current = fringe.pop()
-//       console.log(current.index)
 
       for (let neighbor of this.getNeighbors(current, regex)) {
         this.addEdge(current.coord, neighbor.coord)
@@ -50,7 +49,7 @@ class Graph {
       for (let i of options) {
         if (regex[i] === ')') {
           neighbors.push({
-            coord: [ ...coord],
+            coord: [ ...coord ],
             index: i - 1,
             depth: depth + 1
           })

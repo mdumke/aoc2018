@@ -98,9 +98,10 @@ test('Graph constructor', g => {
     const graph1 = new Graph('^ESSWWN(E|NNENN(EESS(WNSE|)SSS|WWWSSSSE(SW|NNNE)))$')
     const graph2 = new Graph('^WSSEESWWWNW(S|NENNEEEENN(ESSSSW(NWSW|SSEN)|WSWWN(E|WWS(E|SS))))$')
 
+    t.ok(graph1)
+    t.ok(graph2)
     t.end()
   })
-
 
   g.end()
 })
