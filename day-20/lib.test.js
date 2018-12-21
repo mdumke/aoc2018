@@ -17,6 +17,19 @@ test('Graph constructor', g => {
     t.end()
   })
 
+  // assume invalid: path cannot continus after branching
+  //
+  // g.test('N(E|W)N', t => {
+  //   const graph = new Graph('^N(E|W)N$')
+  //
+  //   t.equal(
+  //     Object.values(graph.adjacencyList).map(v => v.length).reduce(sum),
+  //     10
+  //   )
+  //
+  //   t.end()
+  // })
+
   g.test('N(E|W)', t => {
     const graph = new Graph('^N(E|W)$')
 
@@ -28,8 +41,8 @@ test('Graph constructor', g => {
     t.end()
   })
 
-  g.test('N(E|W)N', t => {
-    const graph = new Graph('^N(E|W)N$')
+  g.test('N(E|W(S|W))', t => {
+    const graph = new Graph('^N(E|W(S|W))$')
 
     t.equal(
       Object.values(graph.adjacencyList).map(v => v.length).reduce(sum),
@@ -39,12 +52,12 @@ test('Graph constructor', g => {
     t.end()
   })
 
-  g.test('N(E|W(S|W))N', t => {
-    const graph = new Graph('^N(E|W(S|W))N$')
+  g.test('N(EE(S|EE)|W(S|W))', t => {
+    const graph = new Graph('^N(EE(S|EE)|W(S|W))$')
 
     t.equal(
       Object.values(graph.adjacencyList).map(v => v.length).reduce(sum),
-      14
+      18
     )
 
     t.end()
@@ -100,6 +113,24 @@ test('Graph constructor', g => {
 
     t.ok(graph1)
     t.ok(graph2)
+    t.end()
+  })
+
+  g.end()
+})
+
+test('find longest shortest path', g => {
+  g.test('given example 1', t => {
+    const graph = new Graph('^ESSWWN(E|NNENN(EESS(WNSE|)SSS|WWWSSSSE(SW|NNNE)))$')
+
+    t.equal(graph.findLongestShortestPath(), 23)
+    t.end()
+  })
+
+  g.test('given example 2', t => {
+    const graph = new Graph('^WSSEESWWWNW(S|NENNEEEENN(ESSSSW(NWSW|SSEN)|WSWWN(E|WWS(E|SS))))$')
+
+    t.equal(graph.findLongestShortestPath(), 31)
     t.end()
   })
 

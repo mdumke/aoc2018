@@ -14,8 +14,8 @@ const getInput = cb => {
 }
 
 getInput(data => {
-  console.log(data.length)
   const graph = new Graph(data)
 
-  console.log(graph.adjacencyList)
+  console.log(`Day 20.1: ${graph.findLongestShortestPath([0, 0])}`)
+  console.log(`Day 20.2: ${graph.countLongShortestPaths()}`)
 })
