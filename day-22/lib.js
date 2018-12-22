@@ -9,7 +9,7 @@ const TORCH = 'torch'
 const GEAR = 'gear'
 const NEITHER = 'neither'
 
-// returns the minutes it takes to the target using the fastest route
+// returns the minimum minutes it takes to get to the target
 const findTarget = (cave, target) => {
   // UCS helper functions
   const isExplored = ({ row, col, tool }) =>
@@ -29,8 +29,8 @@ const findTarget = (cave, target) => {
     initialValues: [{ time: 0, tool: TORCH, row: 0, col: 0 }]
   })
 
-  let current
   const visited = {}
+  let current, option
 
   while (fringe.length) {
     current = fringe.dequeue()
@@ -38,11 +38,11 @@ const findTarget = (cave, target) => {
     if (isGoalState(current)) break
     if (isExplored(current)) continue
 
-    markExplored(current)
-
-    for (let neighbor of getOptions(current, cave)) {
-      if (!isExplored[neighbor]) fringe.queue(neighbor)
+    for (option of getOptions(current, cave)) {
+      fringe.queue(option)
     }
+
+    markExplored(current)
   }
 
   return current.time
@@ -59,13 +59,13 @@ const getOptions = ({ tool, time, row, col }, cave) => {
   }
 
   // move where possible
-  for (let [ x, y ] of [[-1, 0], [0, 1], [1, 0], [0, -1]]) {
-    if (row + x < 0 || col + y < 0) continue
-    if (!allowed[cave[row + x][col + y]].includes(tool)) continue
+  for (let [ dx, dy ] of [[-1, 0], [0, 1], [1, 0], [0, -1]]) {
+    if (row + dx < 0 || col + dy < 0) continue
+    if (!allowed[cave[row + dx][col + dy]].includes(tool)) continue
 
     options.push({
-      row: row + x,
-      col: col + y,
+      row: row + dx,
+      col: col + dy,
       tool,
       time: time + 1
     })
