@@ -1,3 +1,8 @@
+/*
+ * compute bot ranges and find most overlapping point
+ *
+ */
+
 const fs = require('fs')
 const Queue = require('js-priority-queue')
 const Cube = require('./cube')
@@ -13,7 +18,6 @@ const findStrongest = bots => {
 // returns all bots that are in range of the given bot
 const findInRange = (bots, bot) =>
   bots.filter(b => manhattan(b, bot) <= bot.range)
-
 
 // returns the { x, y, z } position that is in range of most bots
 const findMostCoveredPoint = bots => {

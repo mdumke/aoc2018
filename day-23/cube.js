@@ -51,13 +51,9 @@ class Cube {
     const directions = this.getChildDirections()
 
     if (this.range === 1) {
-      const coords = directions.map(([ dx, dy, dz ]) => (
-        [this.x + dx, this.y + dy, this.z + dz]
-      ))
-
-      coords.push([this.x, this.y, this.z])
-
-      return coords.map(center => new Cube(center, 0))
+      return this.getAllDirections()
+        .map(([ dx, dy, dz ]) => [ this.x + dx, this.y + dy, this.z + dz ])
+        .map(center => new Cube(center, 0))
     }
 
     return directions
@@ -66,6 +62,21 @@ class Cube {
       .map(center => {
         return new Cube(center, Math.floor(this.range / 2))
       })
+  }
+
+  // returns 27 relative positions of the last options
+  getAllDirections () {
+    const directions = []
+
+    for (let x of [1, 0, -1]) {
+      for (let y of [1, 0, -1]) {
+        for (let z of [1, 0, -1]) {
+          directions.push([x, y, z])
+        }
+      }
+    }
+
+    return directions
   }
 
   // returns relative positions of 8 children after splitting

@@ -1,4 +1,7 @@
-// too low: 88894455
+/*
+ * Experimental Emergency Teleportation
+ *
+ */
 
 const { manhattan } = require('../utils')
 const {
@@ -8,12 +11,7 @@ const {
   findMostCoveredPoint
 } = require('./lib')
 
-
 getInput('input.txt', bots => {
-  // part 1
-//   console.log(findInRange(bots, findStrongest(bots)).length)
-
-  const mostCovered = findMostCoveredPoint(bots)
-  console.log(mostCovered, manhattan(mostCovered.cube))
+  console.log(`Day 23.1: ${findInRange(bots, findStrongest(bots)).length}`)
+  console.log(`Day 23.2: ${manhattan(findMostCoveredPoint(bots).cube)}`)
 })
-

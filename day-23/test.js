@@ -27,9 +27,9 @@ test('Cube.split', g => {
 test('Cube.countBotsInRange', t => {
   const cube = new Cube([2, 2, 2], 2)
   const bots = [
-    { x: -1, y: -1, z: -1, range: 3},
-    { x: 2, y: 2, z: 6, range: 3},
-    { x: 2, y: 2, z: 6, range: 1},
+    { x: -1, y: -1, z: -1, range: 3 },
+    { x: 2, y: 2, z: 6, range: 3 },
+    { x: 2, y: 2, z: 6, range: 1 }
   ]
 
   t.equal(cube.countBotsInRange(bots), 2)

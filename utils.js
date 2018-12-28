@@ -16,9 +16,8 @@ const countByValue = (lookup, v) => {
   return lookup
 }
 
-const manhattan = (p1, p2 = { x: 0, y: 0, z: 0}) =>
+const manhattan = (p1, p2 = { x: 0, y: 0, z: 0 }) =>
   Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y) + Math.abs(p1.z - p2.z)
-
 
 module.exports = {
   ascending, countByValue, max, min, sum, manhattan
