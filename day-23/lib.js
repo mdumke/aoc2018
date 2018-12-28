@@ -3,6 +3,18 @@ const Queue = require('js-priority-queue')
 const Cube = require('./cube')
 const { manhattan } = require('../utils')
 
+// returns the bot with the longest range
+const findStrongest = bots => {
+  return bots.reduce((strongest, bot) => {
+    return bot.range > strongest.range ? bot : strongest
+  })
+}
+
+// returns all bots that are in range of the given bot
+const findInRange = (bots, bot) =>
+  bots.filter(b => manhattan(b, bot) <= bot.range)
+
+
 // returns the { x, y, z } position that is in range of most bots
 const findMostCoveredPoint = bots => {
   const cube = new Cube([0, 0, 0], Math.pow(2, 32))
@@ -47,6 +59,8 @@ const getInput = (filename, cb) => {
 
 module.exports = {
   findMostCoveredPoint,
+  findStrongest,
+  findInRange,
   getInput,
   parseLine
 }

@@ -1,10 +1,19 @@
 // too low: 88894455
 
-const { getInput, findMostCoveredPoint } = require('./lib')
 const { manhattan } = require('../utils')
+const {
+  getInput,
+  findInRange,
+  findStrongest,
+  findMostCoveredPoint
+} = require('./lib')
+
 
 getInput('input.txt', bots => {
-  const current = findMostCoveredPoint(bots)
-  console.log(current, manhattan(current.cube))
+  // part 1
+//   console.log(findInRange(bots, findStrongest(bots)).length)
+
+  const mostCovered = findMostCoveredPoint(bots)
+  console.log(mostCovered, manhattan(mostCovered.cube))
 })
 
