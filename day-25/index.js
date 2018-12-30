@@ -1,3 +1,8 @@
+/*
+ * Four-Dimensional Adventure
+ *
+ */
+
 const { assembleConstellations, getInput } = require('./lib')
 
 getInput(coords => {
