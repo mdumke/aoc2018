@@ -4,9 +4,14 @@
  */
 
 class Field {
-  constructor (groups) {
+  constructor (groups, boost = 0) {
     this.groups = groups.reduce((acc, group, i) => {
       acc[i] = group
+
+      if (group.party === 'Immune system') {
+        acc[i].damage = acc[i].damage + boost
+      }
+
       return acc
     }, {})
 
@@ -14,9 +19,10 @@ class Field {
     this.attackOrder = null
   }
 
-  // returns the remaining unit-counts after the battle
+  // returns the remaining unit-counts after the battle (may be stalemate)
   simulateBattle () {
     let counts = this.getUnitCounts()
+    let previous = { immune: -1, infection: -1 }
 
     while (counts.immune !== 0 && counts.infection !== 0) {
       this.updateSelectionOrder()
@@ -26,6 +32,13 @@ class Field {
       this.cleanup()
 
       counts = this.getUnitCounts()
+
+      if (
+        previous.immune === counts.immune &&
+        previous.infection === counts.infection
+      ) break
+
+      previous = counts
     }
 
     return counts

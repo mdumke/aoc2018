@@ -8,11 +8,9 @@ const Field = require('./field')
 const Group = require('./group')
 
 // returns the number of remaining units after battle
-const findUnitsAfterBattle = groups => {
-  const field1 = new Field(groups)
-  const counts = field1.simulateBattle()
-
-  return counts
+const findUnitsAfterBattle = (groups, boost = 0) => {
+  const field = new Field(groups, boost)
+  return field.simulateBattle()
 }
 
 const getInput = filename => {
